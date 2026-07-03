@@ -1,0 +1,161 @@
+﻿/*
+Copyright 2016 - 2026 by Benilda Key
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+OF SUCH DAMAGE.
+*/
+
+#include <Windows.h>
+#include <imm.h>
+#include <Richedit.h>
+// ReSharper disable once CppUnusedIncludeDirective
+#include <TOM.h>
+// ReSharper disable once CppUnusedIncludeDirective
+#include <TextServ.h>
+
+EXTERN_C_START
+
+[[maybe_unused]]
+constexpr IID LIBID_tom{
+	0x8CC497C9, 0xA1DF, 0x11ce,
+	{0x80, 0x98, 0, 0xAA, 0, 0x47, 0xBE, 0x5D}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextDocument{
+	0x8CC497C0, 0xA1DF, 0x11ce,
+	{0x80, 0x98, 0, 0xAA, 0, 0x47, 0xBE, 0x5D}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextRange{
+	0x8CC497C2, 0xA1DF, 0x11ce,
+	{0x80, 0x98, 0, 0xAA, 0, 0x47, 0xBE, 0x5D}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextSelection{
+	0x8CC497C1, 0xA1DF, 0x11ce,
+	{0x80, 0x98, 0, 0xAA, 0, 0x47, 0xBE, 0x5D}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextFont{
+	0x8CC497C3, 0xA1DF, 0x11ce,
+	{0x80, 0x98, 0, 0xAA, 0, 0x47, 0xBE, 0x5D}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextPara{
+	0x8CC497C4, 0xA1DF, 0x11ce,
+	{0x80, 0x98, 0, 0xAA, 0, 0x47, 0xBE, 0x5D}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextStoryRanges{
+	0x8CC497C5, 0xA1DF, 0x11ce,
+	{0x80, 0x98, 0, 0xAA, 0, 0x47, 0xBE, 0x5D}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextDocument2{
+	0xC241F5E0, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextRange2{
+	0xC241F5E2, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextSelection2{
+	0xC241F5E1, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextFont2{
+	0xC241F5E3, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextPara2{
+	0xC241F5E4, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextStoryRanges2{
+	0xC241F5E5, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextStory{
+	0xC241F5F3, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextStrings{
+	0xC241F5E7, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextRow{
+	0xC241F5EF, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextDisplays{
+	0xC241F5F2, 0x7206, 0x11D8,
+	{0xA2, 0xC7, 0, 0xA0, 0xD1, 0xD6, 0xC6, 0xB3}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextDocumen2Old{
+	0x01c25500, 0x4268, 0x11d1,
+	{0x88, 0x3a, 0x3c, 0x8b, 0, 0xc1, 0, 0}
+};
+[[maybe_unused]]
+constexpr IID IID_IRicheditUiaNotificationOverrides{
+	0xa6bf39f8, 0x11de, 0x48ea,
+	{0x87, 0x80, 0x99, 0x50, 0xbc, 0x13, 0x94, 0x9d}
+};
+[[maybe_unused]]
+constexpr IID IID_IRicheditUiaOverrides{
+	0xf2fb5cc0, 0xb5a9, 0x437f,
+	{0x9b, 0xa2, 0x47, 0x63, 0x20, 0x82, 0x26, 0x9f}
+};
+[[maybe_unused]]
+constexpr IID IID_IRicheditWindowlessAccessibility{
+	0x983e572d, 0x20cd, 0x460b,
+	{0x91, 0x4, 0x83, 0x11, 0x15, 0x92, 0xdd, 0x10}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextHost{
+	0x13e670f4, 0x1a5a, 0x11cf,
+	{0xab, 0xeb, 0, 0xaa, 0, 0xb6, 0x5e, 0xa1}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextHost2{
+	0x13e670f5, 0x1a5a, 0x11cf,
+	{0xab, 0xeb, 0, 0xaa, 0, 0xb6, 0x5e, 0xa1}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextServices{
+	0x8d33f740, 0xcf58, 0x11ce,
+	{0xa8, 0x9d, 0, 0xaa, 0, 0x6c, 0xad, 0xc5}
+};
+[[maybe_unused]]
+constexpr IID IID_ITextServices2{
+	0x8d33f741, 0xcf58, 0x11ce,
+	{0xa8, 0x9d, 0, 0xaa, 0, 0x6c, 0xad, 0xc5}
+};
+
+EXTERN_C_END
