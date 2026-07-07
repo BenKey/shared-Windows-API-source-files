@@ -30,6 +30,13 @@ OF SUCH DAMAGE.
 // ReSharper disable once CppUnusedIncludeDirective
 #include <TextServ.h>
 
+#if !defined(EXTERN_C_START)
+#  define EXTERN_C_START extern "C" {
+#endif
+#if !defined(EXTERN_C_END)
+#  define EXTERN_C_END }
+#endif
+
 EXTERN_C_START
 
 [[maybe_unused]]
